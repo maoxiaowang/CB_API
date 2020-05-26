@@ -35,7 +35,7 @@ def generate_menu_context(prefix=None, query=None, context=None):
     urls = list()
     all_urls = list()
     context = context or dict()
-    exclude_urls = ['', 'api/', 'setup/']
+    exclude_urls = ['', 'api/', 'admin/']
     display_attrs = {
         'max_length': '最大长度',
         'min_length': '最小长度',
@@ -180,8 +180,8 @@ def generate_menu_context(prefix=None, query=None, context=None):
 def make_menus(url_list):
     """
     {
-        “base”: {“user”: ["list", "detail", ...], ..., “group”: [...], ...}
-        “vserver”: {“compute”: [...], “network”: [...],...]
+        “level1-1”: {“level2-1”: ["sub1", "sub2", ...], ..., “level2-2”: [...], ...}
+        “level1-2”: {“level2-3”: [...], “level2-4”: [...],...]
     }
     """
     menus = dict()  # {FIRST_PART_NAME: SECOND_LEVEL_LIST, }
