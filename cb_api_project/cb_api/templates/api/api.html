@@ -1,0 +1,272 @@
+{% extends 'layout.html' %}
+{% load static i18n cache %}
+{% load general api %}
+{% block title_content %}接口列表{% endblock %}
+
+{% block modals %}
+  {% include 'api/modals/instruction.html' %}
+  {% include 'api/modals/params.html' %}
+{% endblock %}
+{% block nav_left %}
+  <div class="app-search">
+    <form>
+      <div class="input-group">
+        <input type="text" class="form-control" name="query" placeholder="搜索" value="{{ query }}">
+        <span class="mdi mdi-magnify"></span>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">搜索</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+{% block page_title_right %}
+  <div class="page-title-right">
+    <div class="btn">
+      {% if prefix %}<span class="text-danger px-1">{{ prefix }}</span>的相关结果：{% endif %}
+      {% if query %}<span class="text-danger px-1">{{ query }}</span>的搜索结果：{% endif %}
+      共{{ urls|length }}条
+    </div>
+  </div>
+{% endblock %}
+{% block page_title_content %}接口列表{% endblock %}
+{% block main %}
+  <div class="row">
+    <div class="col-12">
+      <div class="accordion" id="accordion-urls">
+        {% for items in urls %}
+          {% with method=items.methods.0 color=items.methods.0|method_to_level %}
+            <div class="card ribbon-box">
+              <div class="card-header" id="heading{{ forloop.counter }}" data-method-color="{{ color }}">
+                <div class="ribbon-two ribbon-two-{{ color }}"><span>{{ method|upper }}</span></div>
+
+                <h2 class="mb-0 ml-4">
+                  <button class="btn btn-block btn-link text-left" type="button" data-toggle="collapse"
+                          data-target="#collapse{{ forloop.counter }}" aria-expanded="true"
+                          aria-controls="collapse{{ forloop.counter }}">
+                    {{ items.url }}
+                  </button>
+                </h2>
+              </div>
+              <div id="collapse{{ forloop.counter }}" class="collapse multi-collapse"
+                   aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion-urls">
+                <div class="card-body">
+                  {# API Description #}
+
+                  <h4 class="">接口描述</h4>
+                  <p>
+                    {% if items.doc %}
+                      {{ items.doc|linebreaksbr }}
+                    {% endif %}
+                  </p>
+
+                  {# Form Description #}
+                  {% if items.fields|length > 0 %}
+                    <h4 class="mt-4">表单说明</h4>
+                    <table class="table table-sm">
+                      <thead class="thead-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">字段名</th>
+                        <th scope="col" style="min-width: 5rem;">类型</th>
+                        <th scope="col">标签</th>
+                        <th scope="col">限制</th>
+                        <th scope="col">可选</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {% for field in items.fields %}
+                        <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
+                          <td>{{ field.name }} {{ field.attrs|field_required_badge|safe }}</td>
+                          <td class="font-weight-light">{{ field.type }}
+                            {% if field.foreign_key %}
+                              <span class="badge badge-secondary badge-pill">外键</span>{% endif %}
+                          </td>
+                          <td><span class="font-weight-light"
+                                    {% if field.verbose_name|length > 20 %}data-toggle="tooltip"
+                                    title="{{ field.verbose_name }}" {% endif %}>{% if field.verbose_name|length > 20 %}
+                            {{ field.verbose_name|truncatechars:'20' }}{% else %}
+                            {{ field.verbose_name }}{% endif %}</span></td>
+                          <td>
+                            {{ field.attrs|format_field_attrs|safe }}
+                          </td>
+
+                          <td>
+                            {{ field.choices|format_field_choices|safe }}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  {% endif %}
+
+                  {# API testing #}
+                  <h4 class="mt-3">接口测试</h4>
+                  <h6 class="mt-3">请求地址</h6>
+                  <form data-url-form>
+                    <div class="row-fluid">
+                      <div class="col pl-0">
+                        {{ items.url|request_url_params|safe }}?
+                        <input class="form-control form-control-sm d-inline w-auto" type="text"
+                               placeholder="可选参数，如a=1&b=2" name="dataParam">
+                        <a class="text-muted" tabindex="0" role="button" style="cursor: pointer"
+                           data-toggle="modal"
+                           data-target="#params-modal">
+                          <i class="far fa-question-circle"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </form>
+
+                  {% decorate_form items.form as form %}
+                  {% if form %}
+                    <h6 class="mt-3">表单数据</h6>
+                  {% endif %}
+                  <form action="{{ items.url }}" method="{{ items.methods.0 }}" data-request-form>
+                    <div class="row-fluid">
+                      {% generate_list 'checkbox' 'radio' as check_list %}
+                      {% for field in form %}
+                        {% with input_type=field.field.widget.input_type %}
+                          <div class="form-group col-lg-6 pl-0">
+                            {% if input_type in check_list %}
+                              <div class="form-check">
+                              {{ field|add_class_for_field }}
+                              {{ field|label_filter:'form-check-label' }}
+                            {% else %}
+                              {{ field|label_filter:'form-control-label' }}
+                              {{ field|add_class_for_field }}
+                            {% endif %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% if field.field.widget.input_type in check_list %}
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endwith %}
+                      {% endfor %}
+                    </div>
+                    <div class="row-fluid">
+                      <div class="form-group col-lg-8 pl-0">
+                        <button class="btn btn-{{ color }} btn-sm my-2">调用接口 <i class="far fa-arrow-alt-right"></i>
+                        </button>
+                        <div data-response></div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endwith %}
+        {% endfor %}
+      </div> <!-- accordion -->
+    </div> <!-- end col-->
+  </div>
+{% endblock %}
+{% block footer_right %}
+  <div class="col-md-6">
+    <div class="text-md-right footer-links d-none d-md-block">
+      <a href="javascript: void(0);" data-toggle="modal" data-target="#instruction-modal">文档帮助</a>
+      <a href="javascript: void(0);" data-toggle="modal" data-target="#params-modal">参数说明</a>
+      <a>API v2.0</a>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'cb_api/js/api_custom.js' %}?v=4"></script>
+  <script>
+    $(function () {
+      $('#accordions-show').on('click', function (e) {
+        $('#accordion-urls .collapse').removeAttr("data-parent").collapse('show');
+      });
+      $('#accordions-hide').on('click', function (e) {
+        $('#accordion-urls .collapse').attr("data-parent", "#accordion").collapse('hide');
+      });
+      $('input[name=query]').on('input propertychange', function () {
+        if (!$(this).val()) {
+          // $(this).parent().submit();
+        }
+      });
+
+      $('[data-toggle=tooltip]').tooltip();
+
+      // API request
+      let $form = $('form[data-request-form]');
+
+      $.each($form, function (i, item) {
+        $form = $(item);
+        let validator = $form.validate({
+          errorPlacement: function (error, element) {
+            error.appendTo(element.parent())
+          },
+          errorClass: 'invalid-feedback d-block'
+        });
+        let $urlForm = $form.parent().find('form[data-url-form]');
+        let urlValidator = $urlForm.validate({
+          errorPlacement: function (error, element) {
+            error.appendTo(element.parent())
+          },
+          errorClass: 'invalid-feedback'
+        });
+        $urlForm.submit(function (e) {
+          e.preventDefault();
+        });
+        $form.submit(function (e) {
+          e.preventDefault();
+          // validate URL
+          $urlForm.trigger('submit');
+          if (!urlValidator.form()) {
+            return false
+          }
+
+          if (validator.form()) {
+            let $this = $(this), $resResponse = $this.find('[data-response]');
+            $.blockUI();
+            let url = $this.attr('action');
+            $.each($urlForm.find('input[name!=dataParam]'), function (i, item) {
+              url = url.replace($(item).attr('placeholder'), $(item).val())
+            });
+            let dataParam = $urlForm.find('input[name=dataParam]').val();
+            if (dataParam) {
+              dataParam = '?' + dataParam
+            }
+            $.ajax({
+              url: '{0}/{1}{2}'.format(window.location.origin, url, dataParam),
+              type: $this.attr('method'),
+              data: $this.serialize(),
+              success: function (res) {
+                /*
+                try {
+                  JSON.parseJ(res)
+                } catch (e) {
+                  $.notifyCustom('error', '数据必须以JSON形式返回，请检查接口。', '数据格式错误');
+                  $.unblockUI();
+                  return false
+                }
+                */
+
+                $resResponse.addClass('alert');
+                if (res.result) {
+                  $resResponse.removeClass('alert-danger').addClass('alert-success')
+                } else {
+                  $resResponse.removeClass('alert-success').addClass('alert-danger')
+                }
+                try {
+                  $resResponse.JSONView(res);
+                } catch (e) {
+                  $.notifyCustom('error', '数据必须以JSON形式返回，请检查接口。', '数据格式错误');
+                }
+                
+                $.unblockUI();
+              },
+              error: function (res) {
+                $.unblockUI();
+              }
+            })
+
+          }
+        });
+      });
+
+    });
+  </script>
+{% endblock %}

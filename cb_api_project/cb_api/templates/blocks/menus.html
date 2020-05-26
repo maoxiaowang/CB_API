@@ -1,0 +1,27 @@
+<ul class="metismenu side-nav">
+  <li class="side-nav-title side-nav-item">API</li>
+  <li class="side-nav-item">
+    <a href="{% url 'api' %}" class="side-nav-link" id="all-api-link">
+      <i class="uil-home"></i>
+      <span> All </span>
+    </a>
+  </li>
+  {% url 'api' as api_url %}
+  {% for first_name, second_menus in menus.items %}
+  <li class="side-nav-item">
+    <a href="javascript: void(0);" class="side-nav-link">
+      <i class="uil-store"></i>
+      <span> {{ first_name|capfirst }} </span>
+      <span class="menu-arrow"></span>
+    </a>
+    <ul class="side-nav-second-level" aria-expanded="false">
+      {% for second_name, second_names in second_menus.items %}
+        {% for name in second_names %}
+          <li><a href="{{ api_url }}?prefix={{ first_name }}/{{ name }}/">{{ name }}</a></li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+
+</ul>

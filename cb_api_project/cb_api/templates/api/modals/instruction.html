@@ -1,0 +1,53 @@
+<div id="instruction-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="instruction"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title h4">文档说明</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>URL匹配符</h5>
+        <p>&lt;int: ...&gt;: 正整数，如1</p>
+        <p>&lt;uuid: ...&gt;: UUID格式，如b7f4b278-6f5d-40a6-b0f0-268814876c4c</p>
+        <p>&lt;ints: ...&gt;: 逗号分开的正整数，如1,2,3</p>
+        <p>&lt;uuids: ...&gt;: 逗号分开的UUID，如b7f4b278-6f5d-40a6-b0f0-268814876c4c,20f9af33-d842-446d-aeaa-e78f00537022</p>
+        <br>
+        <h5>URL参数</h5>
+        <p>通过URL传的参数，如a=1&b=2，需要后台开发人员在接口的doc中写明。</p>
+        <p>对于GET、DELETE接口建议减少URL参数传递，对于PUT、POST接口建议从表单传递数据。</p>
+        <br>
+        <h5>表单字段</h5>
+        <p>只有使用了表单的接口会有表单字段说明。</p>
+        <p>“-”表示无限制。</p>
+        <br>
+        <hr class="mt-0">
+        <h5>搜索</h5>
+        <p>从请求方法，文档说明，URL中搜索。多个关键词之间用空格隔开。</p>
+        <br>
+        <hr class="mt-0">
+        <h5>F&Q</h5>
+        <h6>F: 接口变更如何记录？</h6>
+        <p>Q: 后台开发人员在接口的Python doc中记录，如
+          <br>
+          <code>
+            """<br>
+            用户登录<br><br>
+            2020-01-01 添加remember_me字段<br>
+            2020-01-02 URL变更：/user/login/ -> /user/login2/<br>
+            ...
+            """
+          </code>
+          <br>
+        </p>
+        <h6>F: 接口为何没有在文档中显示？</h6>
+        <p>Q: 查看接口类属性“is_api”是否为False。</p>
+        <h6>F: 接口为何没有显示表单？</h6>
+        <p>Q: 检查接口类的属性“form_class”是否存在。</p>
+      </div>
+    </div>
+  </div>
+</div>

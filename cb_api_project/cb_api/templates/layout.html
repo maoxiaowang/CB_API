@@ -1,0 +1,156 @@
+{% load static i18n cache %}
+{% load general api %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title_content %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'cb_api/css/app.min.css' %}">
+  <link rel="stylesheet" href="{% static 'cb_api/css/icons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'cb_api/libs/fontawesome/fontawesome-pro/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'cb_api/libs/jsonview/jquery.jsonview.min.css' %}">
+</head>
+<body data-leftbar-theme="dark">
+
+{% block modals %}{% endblock %}
+
+<!-- Begin page -->
+<div class="wrapper">
+  <!-- ========== Left Sidebar Start ========== -->
+  <div class="left-side-menu">
+
+    <!-- LOGO -->
+    <a href="{% url 'api' %}" class="logo text-center logo-light">
+      <span class="logo-lg">
+        <img src="{% static 'cb_api/images/logo.png' %}?v=1" alt="" height="48">
+      </span>
+      <span class="logo-sm">
+        <img src="{% static 'cb_api/images/logo_sm.png' %}?v=1" alt="" height="48">
+      </span>
+    </a>
+
+    <!-- LOGO -->
+    <a href="{% url 'api' %}" class="logo text-center logo-dark">
+      <span class="logo-lg">
+        <img src="{% static 'cb_api/images/logo-dark.png' %}" alt="" height="48">
+      </span>
+      <span class="logo-sm">
+        <img src="{% static 'cb_api/images/logo_sm_dark.png' %}" alt="" height="48">
+      </span>
+    </a>
+
+    <div class="h-100" id="left-side-menu-container" data-simplebar="dark">
+
+      <!--- Sidemenu -->
+      {% include 'blocks/menus.html' %}
+
+      <div class="clearfix"></div>
+    </div>
+    <!-- Sidebar -left -->
+
+  </div>
+  <!-- Left Sidebar End -->
+
+  <!-- ============================================================== -->
+  <!-- Start Page Content here -->
+  <!-- ============================================================== -->
+
+  <div class="content-page">
+    <div class="content">
+      <!-- Topbar Start -->
+      <div class="navbar-custom">
+        <ul class="list-unstyled topbar-right-menu float-right mb-0">
+{#          <li class="notification-list">#}
+{#            <a class="nav-link right-bar-toggle" href="javascript: void(0);">#}
+{#              <i class="dripicons-gear noti-icon"></i>#}
+{#            </a>#}
+{#          </li>#}
+
+          <li class="dropdown notification-list">
+            {% with username=request.user.display_name|default:request.user.username|truncatechars:"10" %}
+            <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="false" aria-expanded="false">
+                <span class="account-user-avatar">
+                  <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="user-avatar" class="rounded-circle">
+                </span>
+              <span>
+                <span class="account-user-name">{{ username }}</span>
+                <span class="account-position">{{ request.user.is_superuser|yesno:"超级管理员,管理员" }}</span>
+              </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+              <!-- item-->
+              <div class=" dropdown-header noti-title">
+                <h6 class="text-overflow m-0">Welcome {{ username  }}!</h6>
+              </div>
+
+              <!-- item-->
+              <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <i class="mdi mdi-logout mr-1"></i>
+                <span>Logout</span>
+              </a>
+
+            </div>
+            {% endwith %}
+          </li>
+
+        </ul>
+        <button class="button-menu-mobile open-left disable-btn">
+          <i class="mdi mdi-menu"></i>
+        </button>
+        {% block nav_left %}{% endblock %}
+      </div>
+      <!-- end Topbar -->
+
+      <!-- Start Content-->
+      <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box">
+              {% block page_title_right %}{% endblock %}
+              <h4 class="page-title">{% block page_title_content %}{% endblock %}</h4>
+            </div>
+          </div>
+        </div>
+        <!-- end page title -->
+
+        {% block main %}{% endblock %}
+
+      </div> <!-- container -->
+
+    </div> <!-- content -->
+
+    <!-- Footer Start -->
+    <footer class="footer">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            2019 - 2020 © Oliver
+          </div>
+          {% block footer_right %}{% endblock %}
+        </div>
+      </div>
+    </footer>
+    <!-- end Footer -->
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- End Page content -->
+  <!-- ============================================================== -->
+
+</div>
+<!-- END wrapper -->
+
+<!-- bundle -->
+<script src="{% static 'cb_api/js/vendor.min.js' %}"></script>
+<script src="{% static 'cb_api/js/app.min.js' %}?v=4"></script>
+<script src="{% static 'cb_api/libs/blockUI/jquery.blockUI.min.js' %}"></script>
+<script src="{% static 'cb_api/libs/jsonview/jquery.jsonview.min.js' %}"></script>
+<script src="{% static 'cb_api/libs/validate/dist/jquery.validate.min.js' %}"></script>
+{#<script src="{% static 'libs/bootstrap-notify/bootstrap-notify.min.js' %}"></script>#}
+{% block js %}{% endblock %}
+</body>
+</html>

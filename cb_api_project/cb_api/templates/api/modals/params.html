@@ -1,0 +1,141 @@
+<div id="params-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="instruction"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title h4">参数说明</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6 class="h5 border-left pl-2 border-info" style="border-width: medium!important;">分页</h6>
+        <table class="table table-striped table-sm mb-4">
+          <thead>
+          <tr>
+            <th scope="col">参数名</th>
+            <th scope="col">释义</th>
+            <th scope="col">可选值</th>
+            <th scope="col">示例</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">pageSize</th>
+            <td>每页条目数</td>
+            <td>正整数</td>
+            <td>pageSize=10（默认10）</td>
+          </tr>
+          <tr>
+            <th scope="row">page</th>
+            <td>当前页</td>
+            <td>正整数</td>
+            <td>page=1（默认1）</td>
+          </tr>
+          <tr>
+            <th scope="row">all</th>
+            <td>显示所有（不分页）</td>
+            <td>true/false</td>
+            <td>all=false（默认false）</td>
+          </tr>
+          </tbody>
+        </table>
+        <h6 class="h5 border-left pl-2 border-info" style="border-width: medium!important;">过滤</h6>
+        <table class="table table-striped table-sm">
+          <thead>
+          <tr>
+            <th scope="col">参数名</th>
+            <th scope="col">释义</th>
+            <th scope="col">示例</th>
+            <th scope="col">说明</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">__exact</th>
+            <td>相等</td>
+            <td>name__exact=example</td>
+            <td>与字段名组合使用</td>
+          </tr>
+          <tr>
+            <th scope="row">__iexact</th>
+            <td>相等（忽略大小写）</td>
+            <td>name__iexact=example</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__contains</th>
+            <td>包含</td>
+            <td>name__contains=example</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__icontains</th>
+            <td>包含（忽略大小写）</td>
+            <td>name__icontains=example</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__in</th>
+            <td>属于</td>
+            <td>id__in=[1, 2]<br>
+              name__in=["example1", "example2"]
+            </td>
+            <td>列表中可为数字、字符串等</td>
+          </tr>
+          <tr>
+            <th scope="row">__gt</th>
+            <td>大于</td>
+            <td>id__gt=10<br>
+              created_at__gt=2018-11-28 14:15:52
+            </td>
+            <td>过滤日期时间需要数据库的时区支持</td>
+          </tr>
+          <tr>
+            <th scope="row">__gte</th>
+            <td>大于等于</td>
+            <td>id__gte=10</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__lt</th>
+            <td>小于</td>
+            <td>id__lt=10</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__lte</th>
+            <td>小于等于</td>
+            <td>id__lte=10</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <th scope="row">__range</th>
+            <td>区间</td>
+            <td>id__range=[1,5]<br>
+              created_at__range=["2018-11-28 14:15:52","2018-11-28 14:15:53"]
+            </td>
+            <td>列表中可为数字、字符串等</td>
+          </tr>
+          <tr>
+            <th scope="row">__isnull</th>
+            <td>为空</td>
+            <td>last_login__isnull=true</td>
+            <td>匹配数据库中的NULL</td>
+          </tr>
+          <tr>
+            <th scope="row">exclude__</th>
+            <td>排除</td>
+            <td>
+              exclude__name__exact=example<br>
+              exclude__id__range=[1,5]
+            </td>
+            <td>'exclude__' + 字段名 = 条件</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
