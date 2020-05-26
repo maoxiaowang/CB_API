@@ -8,8 +8,8 @@ Django 2.0+，且使用通用类视图
 
 ## 使用方法
 
-1. 将cb_api目录复制到你的Django项目下
-2. 在settings.py中加入App“cb_api”，推荐"cb_api.apps.APIAppConfig"
+1. 将cb_api目录复制到Django项目下
+2. 在settings.py中加入App“cb_api”
 ```python
 INSTALLED_APPS = [
     ...
