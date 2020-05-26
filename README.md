@@ -1,4 +1,4 @@
-# CB_API
+# CB_API - Django Class-based API Document and Testing
 
 基于类视图的API文档，可在线测试接口
 
