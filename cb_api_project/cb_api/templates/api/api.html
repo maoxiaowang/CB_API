@@ -5,7 +5,6 @@
 
 {% block modals %}
   {% include 'api/modals/instruction.html' %}
-  {% include 'api/modals/params.html' %}
 {% endblock %}
 {% block nav_left %}
   <div class="app-search">
@@ -110,11 +109,6 @@
                         {{ items.url|request_url_params|safe }}?
                         <input class="form-control form-control-sm d-inline w-auto" type="text"
                                placeholder="可选参数，如a=1&b=2" name="dataParam">
-                        <a class="text-muted" tabindex="0" role="button" style="cursor: pointer"
-                           data-toggle="modal"
-                           data-target="#params-modal">
-                          <i class="far fa-question-circle"></i>
-                        </a>
                       </div>
                     </div>
                   </form>
