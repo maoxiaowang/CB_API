@@ -25,3 +25,6 @@ urlpatterns = [
     path('api/', ShowAPI.as_view(), name='api'),
 ]
 ```
+
+## 示例截图
+[截图](http://cdn.sandbook.club/cb_api.png)
