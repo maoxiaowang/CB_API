@@ -27,4 +27,5 @@ urlpatterns = [
 ```
 
 ## 示例截图
-![截图](https://github.com/maoxiaowang/CB_API/blob/master/screenshot.png)
+
+![screenshot1.png](https://github.com/maoxiaowang/CB_API/blob/master/screenshot1.png)
