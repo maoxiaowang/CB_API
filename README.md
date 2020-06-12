@@ -27,4 +27,4 @@ urlpatterns = [
 ```
 
 ## 示例截图
-[截图](http://cdn.sandbook.club/cb_api.png)
+![截图](http://cdn.sandbook.club/cb_api.png)
