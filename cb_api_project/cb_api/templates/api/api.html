@@ -168,6 +168,7 @@
   <script src="{% static 'cb_api/js/api_custom.js' %}?v=4"></script>
   <script>
     $(function () {
+        let resultField = '{{ result_filed }}';
       $('#accordions-show').on('click', function (e) {
         $('#accordion-urls .collapse').removeAttr("data-parent").collapse('show');
       });
@@ -238,7 +239,7 @@
                 */
 
                 $resResponse.addClass('alert');
-                if (res.result) {
+                if (res[resultField]) {
                   $resResponse.removeClass('alert-danger').addClass('alert-success')
                 } else {
                   $resResponse.removeClass('alert-success').addClass('alert-danger')

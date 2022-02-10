@@ -12,7 +12,6 @@ from django.urls import URLPattern, URLResolver
 from django.utils.text import slugify
 from django.views.generic.base import TemplateView
 
-from cb_api.constants import API_QUERIES_KEY
 
 User = get_user_model()
 
@@ -168,7 +167,7 @@ def generate_menu_context(prefix=None, query=None, context=None):
     query_slug = slugify(query, allow_unicode=True)
     if query_slug:
         queries.append(query_slug)
-        cache.set(API_QUERIES_KEY, queries, 3600)
+        cache.set(settings.API_QUERIES_KEY, queries, 3600)
     menus = make_menus(all_urls)
     context.update(
         urls=urls, query=query, query_slug=query_slug,
@@ -212,7 +211,7 @@ def make_menus(url_list):
     return menus
 
 
-queries = cache.get(API_QUERIES_KEY, [])
+queries = cache.get(settings.API_QUERIES_KEY, [])
 
 
 class ShowAPI(TemplateView):
@@ -237,6 +236,8 @@ class ShowAPI(TemplateView):
         query = self.request.GET.get('query', '').strip()
         prefix = self.request.GET.get('prefix', '')
         kwargs = generate_menu_context(prefix=prefix, query=query, context=kwargs)
+        result_filed = settings.API_RESULT_FIELD
+        kwargs.update(result_filed=result_filed)
         return kwargs
 
     def http_method_not_allowed(self, request, *args, **kwargs):

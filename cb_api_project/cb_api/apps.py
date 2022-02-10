@@ -1,12 +1,14 @@
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-
-from cb_api.constants import API_QUERIES_KEY
 
 
 class APIAppConfig(AppConfig):
     name = 'cb_api'
+    # default settings
+    API_RESULT_FIELD = 'result'
+    API_QUERIES_KEY = 'api_queries'
 
     def ready(self):
         # clean api page cache
@@ -14,8 +16,8 @@ class APIAppConfig(AppConfig):
         cache.delete(key)
 
         # reset api queries cache
-        queries = cache.get(API_QUERIES_KEY, [])
+        queries = cache.get(settings.API_QUERIES_KEY, [])
         for query in queries:
             key = make_template_fragment_key('api_page', [query])
             cache.delete(key)
-        cache.delete(API_QUERIES_KEY)
+        cache.delete(settings.API_QUERIES_KEY)
