@@ -38,7 +38,7 @@ urlpatterns = [
 ```
 那么，需要在Project/settings.py中配置如下：
 ```python
-API_RESULT_FIELD = "success"
+CBAPI_RESULT_FIELD = "success"
 ```
 > 页面会根据这个值来判断返回结果是否正确,该配置不会影响测试结果，只影响显示效果。
 

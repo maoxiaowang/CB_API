@@ -236,7 +236,7 @@ class ShowAPI(TemplateView):
         query = self.request.GET.get('query', '').strip()
         prefix = self.request.GET.get('prefix', '')
         kwargs = generate_menu_context(prefix=prefix, query=query, context=kwargs)
-        result_filed = settings.API_RESULT_FIELD
+        result_filed = settings.CBAPI_RESULT_FIELD
         kwargs.update(result_filed=result_filed)
         return kwargs
 
