@@ -25,7 +25,7 @@
         <img src="{% static 'cb_api/images/logo.png' %}?v=2" alt="" height="48">
       </span>
       <span class="logo-sm">
-        <img src="{% static 'cb_api/images/logo_sm.png' %}?v=2" style="margin-left: -35px;" alt="" height="48">
+        <img src="{% static 'cb_api/images/logo-sm.png' %}?v=2" style="margin-left: -35px;" alt="" height="48">
       </span>
     </a>
 
@@ -35,7 +35,7 @@
         <img src="{% static 'cb_api/images/logo-dark.png' %}" alt="" height="48">
       </span>
       <span class="logo-sm">
-        <img src="{% static 'cb_api/images/logo_sm_dark.png' %}" alt="" height="48">
+        <img src="{% static 'cb_api/images/logo-sm-dark.png' %}" alt="" height="48">
       </span>
     </a>
 
@@ -68,29 +68,32 @@
 
           <li class="dropdown notification-list">
             {% with username=request.user.username|default:"匿名用户"|truncatechars:"10" %}
-            <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button"
+            <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" style="{% if not request.user.is_authenticated %}cursor: default{% endif %}" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="false" aria-expanded="false">
                 <span class="account-user-avatar">
                   <img src="{% static 'cb_api/images/default_avatar.png' %}" alt="user-avatar" class="rounded-circle">
                 </span>
               <span>
                 <span class="account-user-name">{{ username }}</span>
-                <span class="account-position">{% if request.user.is_authenticated %}{{ request.user.is_superuser|yesno:"超级管理员,-" }}{% else %}Anonymous{% endif %}</span>
+                <span class="account-position">{% if request.user.is_authenticated %}
+                  {{ request.user.is_superuser|yesno:"超级管理员,-" }}{% else %}Anonymous{% endif %}</span>
               </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
-              <!-- item-->
-              <div class=" dropdown-header noti-title">
-                <h6 class="text-overflow m-0">Welcome {{ username  }}!</h6>
-              </div>
+              {% if request.user.is_authenticated %}
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
 
-              <!-- item-->
-              <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <i class="mdi mdi-logout mr-1"></i>
-                <span>Logout</span>
-              </a>
+                  <!-- item-->
+                  <div class=" dropdown-header noti-title">
+                    <h6 class="text-overflow m-0">Welcome {{ username }}!</h6>
+                  </div>
 
-            </div>
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <i class="mdi mdi-logout mr-1"></i>
+                    <span>Logout</span>
+                  </a>
+                </div>
+              {% endif %}
             {% endwith %}
           </li>
 

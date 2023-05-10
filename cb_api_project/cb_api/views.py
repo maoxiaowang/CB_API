@@ -167,7 +167,7 @@ def generate_menu_context(prefix=None, query=None, context=None):
     query_slug = slugify(query, allow_unicode=True)
     if query_slug:
         queries.append(query_slug)
-        cache.set(settings.API_QUERIES_KEY, queries, 3600)
+        cache.set('api_queries', queries, 3600)
     menus = make_menus(all_urls)
     context.update(
         urls=urls, query=query, query_slug=query_slug,
@@ -211,7 +211,7 @@ def make_menus(url_list):
     return menus
 
 
-queries = cache.get(settings.API_QUERIES_KEY, [])
+queries = cache.get('api_queries', [])
 
 
 class ShowAPI(TemplateView):
@@ -236,7 +236,7 @@ class ShowAPI(TemplateView):
         query = self.request.GET.get('query', '').strip()
         prefix = self.request.GET.get('prefix', '')
         kwargs = generate_menu_context(prefix=prefix, query=query, context=kwargs)
-        result_filed = settings.CBAPI_RESULT_FIELD
+        result_filed = getattr(settings, 'API_RESULT_FIELD', 'success')
         kwargs.update(result_filed=result_filed)
         return kwargs
 
